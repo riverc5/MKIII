@@ -16,9 +16,9 @@ local InitialState = require(ReplicatedFirst.LoadingScreen.InitialState)
 local PLAYERGUI = Players.LocalPlayer:WaitForChild("PlayerGui")
 local INCREMENT = 1 / #Constants.CONTENT
 
-local current = store:getState().loadingBarProgress
-
 local mainMenuStore = Rodux.Store.new(Reducer, InitialState)
+
+local current = mainMenuStore:getState().loadingBarProgress
 
 local root = Roact.createElement("ScreenGui", {
     ZIndexBehavior = Enum.ZIndexBehavior.Global,
@@ -28,7 +28,7 @@ local root = Roact.createElement("ScreenGui", {
     }),
 })
 
-local handle = Roact.mount(app, PLAYERGUI, "LoadingScreen")
+local handle = Roact.mount(root, PLAYERGUI, "LoadingScreen")
 
 ReplicatedFirst:RemoveDefaultLoadingScreen()
 StarterGui:SetCore("TopbarEnabled", false)
@@ -44,7 +44,7 @@ end
 for _, content in pairs(Constants.CONTENT) do
     ContentProvider:PreloadAsync({content})
     current += INCREMENT
-    store:dispatch(SetBarAlpha(current))
+    mainMenuStore:dispatch(SetBarAlpha(current))
     -- TODO PROD-2: Remove this wait on production.
     wait(0.5)
 end

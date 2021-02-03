@@ -2,9 +2,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Rodux = require(ReplicatedStorage.Modules.Rodux)
 
-local Types = require(script.Parent.Parent.Types)
-
-local AddItemToDropdown = Rodux.makeActionCreator("AddItemToDropdown", function(dropdown: Types.Dropdown)
+local AddItemToDropdown = Rodux.makeActionCreator("AddItemToDropdown", function(dropdown)
     return {
         Dropdown = {
             Items = {

@@ -2,6 +2,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Roact = require(ReplicatedStorage.Modules.Roact)
 local Rodux = require(ReplicatedStorage.Modules.Rodux)
+local RoactRodux = require(ReplicatedStorage.Modules.RoactRodux)
 
 local App = require(script.Parent.Parent.App)
 local AddTab = require(script.Parent.Parent.Parent.Actions.AddTab)
@@ -17,13 +18,9 @@ return function(target)
     }, {
         App = Roact.createElement(App),
     })
-    
+
     local handle = Roact.mount(root, target)
-    
-    store:setState({
-        
-    })
-    
+
     store:dispatch(AddTab({
         Name = "HOME",
         Icon = "rbxassetid://6119732925",

@@ -3,6 +3,7 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Roact = require(ReplicatedStorage.Modules.Roact)
+local RoactRodux = require(ReplicatedStorage.Modules.RoactRodux)
 
 local PLAYER = Players.LocalPlayer
 
