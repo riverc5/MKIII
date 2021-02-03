@@ -1,0 +1,8 @@
+{
+    "Lua.diagnostics.globals": [
+        "self"
+    ],
+    "Lua.diagnostics.disable": [
+        "incorrect-call-arguments"
+    ]
+}
