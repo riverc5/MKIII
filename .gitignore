@@ -7,3 +7,10 @@
 
 # Sensitive Data
 ServerStorage/SensitiveData
+
+# repl/VSCode/MacOS files
+/.replit
+/*.DS_Store
+/.vscode
+
+
