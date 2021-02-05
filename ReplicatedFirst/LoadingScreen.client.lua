@@ -8,20 +8,23 @@ local Roact = require(ReplicatedFirst.Immediate.Roact)
 local Rodux = require(ReplicatedFirst.Immediate.Rodux)
 local App = require(ReplicatedFirst.LoadingScreen.Components.App)
 local SetBarAlpha = require(ReplicatedFirst.LoadingScreen.Actions.SetBarAlpha)
+local SetFinished = require(ReplicatedFirst.LoadingScreen.Actions.SetFinished)
 local Reducer = require(ReplicatedFirst.LoadingScreen.Reducers.Reducer)
 local Constants = require(ReplicatedFirst.LoadingScreen.Constants)
--- TODO PROD-1: get this to work without InitialState
-local InitialState = require(ReplicatedFirst.LoadingScreen.InitialState)
 
 local PLAYERGUI = Players.LocalPlayer:WaitForChild("PlayerGui")
 local INCREMENT = 1 / #Constants.CONTENT
 
-local mainMenuStore = Rodux.Store.new(Reducer, InitialState)
+local mainMenuStore = Rodux.Store.new(Reducer)
+
+mainMenuStore:dispatch(SetBarAlpha(0))
+mainMenuStore:dispatch(SetFinished(false))
 
 local current = mainMenuStore:getState().loadingBarProgress
 
 local root = Roact.createElement("ScreenGui", {
     ZIndexBehavior = Enum.ZIndexBehavior.Global,
+    DisplayOrder = 9999,
 }, {
     App = Roact.createElement(App, {
         store = mainMenuStore,
@@ -41,13 +44,19 @@ if not game.IsLoaded then
     game.Loaded:Wait()
 end
 
+wait(5)
+
 for _, content in pairs(Constants.CONTENT) do
     ContentProvider:PreloadAsync({content})
     current += INCREMENT
     mainMenuStore:dispatch(SetBarAlpha(current))
     -- TODO PROD-2: Remove this wait on production.
-    wait(0.5)
+    --wait(0.5)
 end
+
+mainMenuStore:dispatch(SetFinished(true))
+
+wait(0.5)
 
 Roact.unmount(handle)
 

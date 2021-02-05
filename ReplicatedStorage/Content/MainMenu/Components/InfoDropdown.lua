@@ -10,21 +10,23 @@ local InfoDropdown = Roact.Component:extend("InfoDropdown")
 local ProfileItem = require(script.Parent.ProfileItem)
 
 -- TODO: dropdown animation
---[[
+
 function InfoDropdown:init()
-    self.xScale, self.updateXScale = Roact.createBinding(self.props.Size.X.Scale)
-    self.xScaleMotor = Otter.createSingleMotor(self.props.Size.X.Scale)
+    self.closedSize = UDim2.new()
+    self.openSize = UDim2.new()
+
+    self.xScale, self.updateXScale = Roact.createBinding(self.closedSize.X.Scale)
+    self.xScaleMotor = Otter.createSingleMotor(self.closedSize.X.Scale)
     self.xScaleMotor:onStep(self.updateXScale)
 
-    self.yScale, self.updateYScale = Roact.createBinding(self.props.Size.Y.Scale)
-    self.yScaleMotor = Otter.createSingleMotor(self.props.Size.Y.Scale)
+    self.yScale, self.updateYScale = Roact.createBinding(self.closedSize.Y.Scale)
+    self.yScaleMotor = Otter.createSingleMotor(self.closedSize.Y.Scale)
     self.yScaleMotor:onStep(self.updateYScale)
 
     self.size = Roact.joinBindings({self.xScale, self.yScale}):map(function(sizes)
         return UDim2.fromScale(sizes[1], sizes[2])
     end)
 end
-]]
 
 function InfoDropdown:render()
     local children = {
@@ -60,16 +62,16 @@ function InfoDropdown:render()
 end
 
 function InfoDropdown:willUpdate()
-    self.xScaleMotor:setGoal(Otter.spring(self.props.Size.X.Scale, Constants.DROPDOWN_SPRING_CONFIG))
-    self.yScaleMotor:setGoal(Otter.spring(self.props.Size.Y.Scale, Constants.DROPDOWN_SPRING_CONFIG))
+    -- self.xScaleMotor:setGoal(Otter.spring(self.props.Size.X.Scale, Constants.DROPDOWN_SPRING_CONFIG))
+    -- self.yScaleMotor:setGoal(Otter.spring(self.props.Size.Y.Scale, Constants.DROPDOWN_SPRING_CONFIG))
 end
 
--- TODO: remove comment after we get dropdown animation working
---[[
 function InfoDropdown:willUnmount()
     self.xScaleMotor:destroy()
+    self.xScaleMotor = nil
+    self.yScaleMotor:destroy()
+    self.yScaleMotor = nil
 end
-]]
 
 local function mapStateToProps(state, props)
     return state.Dropdown

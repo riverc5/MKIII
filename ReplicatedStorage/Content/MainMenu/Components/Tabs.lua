@@ -8,8 +8,6 @@ local Tabs = Roact.Component:extend("Tabs")
 local Tab = require(script.Parent.Tab)
 
 function Tabs:render()
-    self.props.Tabs = self.props.Tabs or {}
-    
     local children = {
         UIListLayout = Roact.createElement("UIListLayout", {
             FillDirection = Enum.FillDirection.Horizontal,

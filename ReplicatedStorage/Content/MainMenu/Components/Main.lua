@@ -1,22 +1,19 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Roact = require(ReplicatedStorage.Modules.Roact)
-local RoactRodux = require(ReplicatedStorage.Modules.RoactRodux)
 
-local Main = require(script.Parent.Main)
 local Bar = require(script.Parent.Bar)
 local ContentsContainer = require(script.Parent.ContentsContainer)
 
-local App = Roact.Component:extend("App")
+local Main = Roact.Component:extend("Main")
 
-function App:render()
-    return Roact.createElement(RoactRodux.StoreProvider, {
-        store = self.props.store,
+function Main:render()
+    return Roact.createElement("ScreenGui", {
+        DisplayOrder = 50,
     }, {
-        --Main = Roact.createElement(Main),
         Bar = Roact.createElement(Bar),
         ContentsContainer = Roact.createElement(ContentsContainer),
     })
 end
 
-return App
+return Main

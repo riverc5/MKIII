@@ -2,7 +2,7 @@ return {
     TabContents = {},
     activeTab = "HOME",
     Tabs = {
-        {
+        --[[{
             Name = "HOME",
             Icon = "rbxassetid://6119732925",
             Index = "1",
@@ -26,12 +26,12 @@ return {
             Name = "CREDITS",
             Icon = "rbxassetid://6119732925",
             Index = "5",
-        },
+        },]]
     },
     Dropdown = {
         state = false,
         items = {
-            {
+            --[[{
                 Name = "Credits",
                 Text = "100,000",
                 Image = "rbxassetid://6301062902",
@@ -45,7 +45,7 @@ return {
                 Name = "Playtime",
                 Text = "1d, 0h, 0m",
                 Image = "rbxassetid://6301062839",
-            },
+            },]]
         }
     }
 }

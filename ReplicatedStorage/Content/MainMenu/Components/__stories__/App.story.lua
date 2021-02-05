@@ -5,21 +5,22 @@ local Rodux = require(ReplicatedStorage.Modules.Rodux)
 local RoactRodux = require(ReplicatedStorage.Modules.RoactRodux)
 
 local App = require(script.Parent.Parent.App)
+local InitialState = require(script.Parent.Parent.Parent.InitialState)
 local AddTab = require(script.Parent.Parent.Parent.Actions.AddTab)
 local SwitchTab = require(script.Parent.Parent.Parent.Actions.SwitchTab)
 local AddItemToDropdown = require(script.Parent.Parent.Parent.Actions.AddItemToDropdown)
 local Reducer = require(script.Parent.Parent.Parent.Reducers.MainMenuReducer)
 
 return function(target)
-    local store = Rodux.Store.new(Reducer)
+    local store = Rodux.Store.new(Reducer, InitialState, {
+        --Rodux.loggerMiddleware,
+    })
     
-    local root = Roact.createElement(RoactRodux.StoreProvider, {
+    local root = Roact.createElement(App, {
         store = store,
-    }, {
-        App = Roact.createElement(App),
     })
 
-    local handle = Roact.mount(root, target)
+    local handle = Roact.mount(root, target, "MainMenu")
 
     store:dispatch(AddTab({
         Name = "HOME",
