@@ -7,7 +7,8 @@ local TabSelection = Roact.Component:extend("TabSelection")
 
 function TabSelection:render()
     return Roact.createElement("Frame", {
-        Position = UDim2.new(0.207, 0, 0.967, 0), -- TODO: find way to position this
+        -- TODO: position TabSelection relative to AbsolutePosition of current tab
+        Position = UDim2.new(0.207, 0, 0.967, 0), 
         Size = UDim2.new(0.107, 0, 0.067, 0),
         BackgroundColor3 = Color3.fromRGB(203, 82, 65),
         AnchorPoint = Vector2.new(0.5, 0.5),

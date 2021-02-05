@@ -1,10 +1,13 @@
 -- TODO: Set up TUU Firebase database
 local HttpService = game:GetService("HttpService")
+local ServerStorage = game:GetService("ServerStorage")
+
+local SensitiveData = require(ServerStorage.SensitiveData)
 
 local Firebase = {}
 
-local Key = "?auth="
-local URL
+local Key = "?auth="..SensitiveData.APIKeys.Firebase
+local URL = SensitiveData.URLs.Firebase
 
 function Firebase:GetAsync(path)
     local url = URL.. tostring(path) ..".json"..Key

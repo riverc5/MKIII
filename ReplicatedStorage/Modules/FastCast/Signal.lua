@@ -1,11 +1,3 @@
---!nocheck
--- ^ change to strict to crash studio c:
-
--- A new implementation of RBXScriptSignal that uses proper Lua OOP.
--- This was explicitly made to transport other OOP objects.
--- I would be using BindableEvents, but they don't like cyclic tables (part of OOP objects with __index)
-
--- Inject types
 local TypeDefs = require(script.Parent.TypeDefinitions)
 type CanPierceFunction = TypeDefs.CanPierceFunction
 type GenericTable = TypeDefs.GenericTable
@@ -21,10 +13,10 @@ local table = require(script.Parent.Table)
 
 local SignalStatic = {}
 SignalStatic.__index = SignalStatic
-SignalStatic.__type = "Signal" -- For compatibility with TypeMarshaller
+SignalStatic.__type = "Signal"
 local ConnectionStatic = {}
 ConnectionStatic.__index = ConnectionStatic
-ConnectionStatic.__type = "SignalConnection" -- For compatibility with TypeMarshaller
+ConnectionStatic.__type = "SignalConnection"
 
 export type Signal = {
 	Name: string,
@@ -38,7 +30,6 @@ export type Connection = {
 	Index: number	
 }
 
--- Format params: methodName, ctorName
 local ERR_NOT_INSTANCE = "Cannot statically invoke method '%s' - It is an instance method. Call it on an instance of this class created via %s"
 
 function SignalStatic.new(signalName: string): Signal
@@ -65,8 +56,6 @@ local function ThreadAndReportError(delegate: any, args: GenericTable, handlerNa
 	end)
 	local success, msg = coroutine.resume(thread)
 	if not success then 
-		-- For the love of god roblox PLEASE add the ability to customize message type in output statements.
-		-- This "testservice" garbage at the start of my message is annoying as all hell.
 		TestService:Error(string.format("Exception thrown in your %s event handler: %s", handlerName, msg))
 		TestService:Checkpoint(debug.traceback(thread))
 	end
@@ -88,7 +77,6 @@ function SignalStatic:Fire(...)
 	for index = 1, #allCons do
 		local connection = allCons[index]
 		if connection.Delegate ~= nil then
-			-- Catch case for disposed signals.
 			ThreadAndReportError(connection.Delegate, args, connection.Signal.Name)
 		end
 	end
@@ -108,7 +96,6 @@ function SignalStatic:FireSync(...)
 	for index = 1, #allCons do
 		local connection = allCons[index]
 		if connection.Delegate ~= nil then
-			-- Catch case for disposed signals.
 			connection.Delegate(unpack(args))
 		end
 	end

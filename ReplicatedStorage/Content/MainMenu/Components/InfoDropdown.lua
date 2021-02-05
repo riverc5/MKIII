@@ -9,11 +9,12 @@ local InfoDropdown = Roact.Component:extend("InfoDropdown")
 
 local ProfileItem = require(script.Parent.ProfileItem)
 
--- TODO: dropdown animation
-
 function InfoDropdown:init()
+    -- TODO: Find and set sizes for closedSize and openSize and figure out
+    -- AnchorPoints and Positions
+    self.isOpen = true
     self.closedSize = UDim2.new()
-    self.openSize = UDim2.new()
+    self.openSize = UDim2.new(0.839, 0, 0.978, 1)
 
     self.xScale, self.updateXScale = Roact.createBinding(self.closedSize.X.Scale)
     self.xScaleMotor = Otter.createSingleMotor(self.closedSize.X.Scale)
@@ -34,11 +35,11 @@ function InfoDropdown:render()
             Rotation = 90,
             Transparency = NumberSequence.new({
                 NumberSequenceKeypoint.new(0, 0),
-                NumberSequenceKeypoint.new(1, 0.212)
+                NumberSequenceKeypoint.new(1, 0.212),
             }),
             Color = ColorSequence.new({
                 ColorSequenceKeypoint.new(0, Color3.fromRGB(192, 191, 193)),
-                ColorSequenceKeypoint.new(1, Color3.new(1, 1, 1))
+                ColorSequenceKeypoint.new(1, Color3.new(1, 1, 1)),
             })
         }),
         UIListLayout = Roact.createElement("UIListLayout", {
@@ -62,14 +63,19 @@ function InfoDropdown:render()
 end
 
 function InfoDropdown:willUpdate()
-    -- self.xScaleMotor:setGoal(Otter.spring(self.props.Size.X.Scale, Constants.DROPDOWN_SPRING_CONFIG))
-    -- self.yScaleMotor:setGoal(Otter.spring(self.props.Size.Y.Scale, Constants.DROPDOWN_SPRING_CONFIG))
+    if self.props.state == true then
+        self.xScaleMotor:setGoal(Otter.spring(self.openSize, Constants.DROPDOWN_SPRING_CONFIG))
+        self.yScaleMotor:setGoal(Otter.spring(self.openSize, Constants.DROPDOWN_SPRING_CONFIG))
+    else
+        self.xScaleMotor:setGoal(Otter.spring(self.closedSize, Constants.DROPDOWN_SPRING_CONFIG))
+        self.yScaleMotor:setGoal(Otter.spring(self.closedSize, Constants.DROPDOWN_SPRING_CONFIG))
+    end
 end
 
 function InfoDropdown:willUnmount()
     self.xScaleMotor:destroy()
-    self.xScaleMotor = nil
     self.yScaleMotor:destroy()
+    self.xScaleMotor = nil
     self.yScaleMotor = nil
 end
 

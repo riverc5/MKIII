@@ -45,4 +45,8 @@ function MainMenu.new(...)
     return self
 end
 
+function MainMenu:Unmount()
+    Roact.unmount(self.handle)
+end
+
 return MainMenu

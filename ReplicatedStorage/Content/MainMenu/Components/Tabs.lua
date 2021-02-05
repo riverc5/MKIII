@@ -33,7 +33,7 @@ end
 
 local function mapStateToProps(state, props)
     return {
-        Tabs = state.Tabs
+        Tabs = state.Tabs,
     }
 end
 
