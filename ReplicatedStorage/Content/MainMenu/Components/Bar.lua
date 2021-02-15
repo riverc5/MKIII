@@ -3,7 +3,6 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Roact = require(ReplicatedStorage.Modules.Roact)
 
 local Tabs = require(script.Parent.Tabs)
-local TabSelection = require(script.Parent.TabSelection)
 local Profile = require(script.Parent.Profile)
 local Dropdown = require(script.Parent.InfoDropdown)
 
@@ -34,7 +33,6 @@ function Bar:render()
         Dropdown = Roact.createElement(Dropdown),
         Tabs = Roact.createElement(Tabs),
         Profile = Roact.createElement(Profile),
-        TabSelection = Roact.createElement(TabSelection),
     })
 end
 

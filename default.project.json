@@ -23,6 +23,7 @@
     "StarterPlayer": {
       "$className": "StarterPlayer",
       "StarterPlayerScripts": {
+        "$className": "StarterPlayerScripts",
         "$path": "StarterPlayer/StarterPlayerScripts"
       },
       "StarterCharacterScripts": {

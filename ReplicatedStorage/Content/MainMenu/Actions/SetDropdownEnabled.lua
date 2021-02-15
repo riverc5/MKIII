@@ -2,10 +2,10 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Rodux = require(ReplicatedStorage.Modules.Rodux)
 
-local SwitchTab = Rodux.makeActionCreator("SwitchTab", function(tabName)
+local SetDropdownEnabled = Rodux.makeActionCreator("SetDropdownEnabled", function(enabled)
     return {
-        ActiveTab = tabName,
+        enabled = enabled
     }
 end)
 
-return SwitchTab
+return SetDropdownEnabled

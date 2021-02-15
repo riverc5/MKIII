@@ -4,10 +4,22 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Roact = require(ReplicatedStorage.Modules.Roact)
 local RoactRodux = require(ReplicatedStorage.Modules.RoactRodux)
+local Otter = require(ReplicatedStorage.Modules.Otter)
+
+local Constants = require(script.Parent.Parent.Constants)
+
+local SetDropdownEnabled = require(script.Parent.Parent.Actions.SetDropdownEnabled)
 
 local PLAYER = Players.LocalPlayer
 
 local Profile = Roact.Component:extend("Profile")
+
+function Profile:init()
+    self.dropdownEnabled = false
+    self.rotation, self.updateRotation = Roact.createBinding(90)
+    self.rotationMotor = Otter.createSingleMotor(90)
+    self.rotationMotor:onStep(self.updateRotation)
+end
 
 function Profile:render()
     return Roact.createElement("Frame", {
@@ -19,9 +31,14 @@ function Profile:render()
         Dropdown = Roact.createElement("ImageButton", {
             BackgroundTransparency = 1,
             Image = "rbxasset://textures/AnimationEditor/button_control_play.png",
-            Rotation = self.props.state and -90 or 90,
+            Rotation = self.rotation,
             Size = UDim2.new(0.117, 0, 0.467, 0),
             Position = UDim2.new(0.78, 0, 0.244, 0),
+            [Roact.Event.Activated] = function()
+                self.dropdownEnabled = not self.dropdownEnabled
+                self.rotationMotor:setGoal(Otter.spring(self.dropdownEnabled and -90 or 90, Constants.DROPDOWN_SPRING_CONFIG_2))
+                self.props.onClick(self.dropdownEnabled)
+            end,
         }),
         Thumbnail = Roact.createElement("ImageLabel", {
             Image = Players:GetUserThumbnailAsync(PLAYER.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size60x60),
@@ -68,8 +85,21 @@ function Profile:render()
     })
 end
 
-local function mapStateToProps(state, props)
+function Profile:willUnmount()
+    self.rotationMotor:destroy()
+    self.rotationMotor = nil
+end
+
+local function mapStateToProps(state)
     return state.Dropdown
 end
 
-return RoactRodux.connect(mapStateToProps)(Profile)
+local function mapDispatchToProps(dispatch)
+    return {
+        onClick = function(enabled)
+            dispatch(SetDropdownEnabled(enabled))
+        end
+    }
+end
+
+return RoactRodux.connect(mapStateToProps, mapDispatchToProps)(Profile)

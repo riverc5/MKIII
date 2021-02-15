@@ -1,7 +1,10 @@
 return {
     TabContents = {},
-    activeTab = "HOME",
-    Tabs = {},
+    Tabs = {
+        TabRefs = {},
+        ActiveTab = "Home",
+        Tabs = {},
+    },
     Dropdown = {
         state = false,
         items = {},

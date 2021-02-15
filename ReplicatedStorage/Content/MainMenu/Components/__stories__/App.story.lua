@@ -2,12 +2,10 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Roact = require(ReplicatedStorage.Modules.Roact)
 local Rodux = require(ReplicatedStorage.Modules.Rodux)
-local RoactRodux = require(ReplicatedStorage.Modules.RoactRodux)
 
 local App = require(script.Parent.Parent.App)
 local InitialState = require(script.Parent.Parent.Parent.InitialState)
 local AddTab = require(script.Parent.Parent.Parent.Actions.AddTab)
-local SwitchTab = require(script.Parent.Parent.Parent.Actions.SwitchTab)
 local AddItemToDropdown = require(script.Parent.Parent.Parent.Actions.AddItemToDropdown)
 local Reducer = require(script.Parent.Parent.Parent.Reducers.MainMenuReducer)
 
@@ -15,31 +13,37 @@ return function(target)
     local store = Rodux.Store.new(Reducer, InitialState, {
         --Rodux.loggerMiddleware,
     })
-    
+
     local root = Roact.createElement(App, {
         store = store,
+        isStory = true,
     })
 
     local handle = Roact.mount(root, target, "MainMenu")
 
     store:dispatch(AddTab({
-        Name = "HOME",
+        Name = "Home",
+        Text = "HOME",
         Icon = "rbxassetid://6119732925",
     }))
     store:dispatch(AddTab({
-        Name = "RULES",
+        Name = "Rules",
+        Text = "RULES",
         Icon = "rbxassetid://6119732925",
     }))
     store:dispatch(AddTab({
-        Name = "STORE",
+        Name = "Store",
+        Text = "STORE",
         Icon = "rbxassetid://6119732925",
     }))
     store:dispatch(AddTab({
-        Name = "DONATE",
+        Name = "Donations",
+        Text = "DONATE",
         Icon = "rbxassetid://6119732925",
     }))
     store:dispatch(AddTab({
-        Name = "CREDITS",
+        Name = "Credits",
+        Text = "CREDITS",
         Icon = "rbxassetid://6119732925",
     }))
 
@@ -58,7 +62,7 @@ return function(target)
         Text = "100,000",
         Image = "rbxassetid://6301062902",
     }))
-    
+
     return function()
         Roact.unmount(handle)
     end

@@ -3,6 +3,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Roact = require(ReplicatedStorage.Modules.Roact)
 local RoactRodux = require(ReplicatedStorage.Modules.RoactRodux)
 local Otter = require(ReplicatedStorage.Modules.Otter)
+
 local Constants = require(script.Parent.Parent.Constants)
 
 local InfoDropdown = Roact.Component:extend("InfoDropdown")
@@ -10,11 +11,8 @@ local InfoDropdown = Roact.Component:extend("InfoDropdown")
 local ProfileItem = require(script.Parent.ProfileItem)
 
 function InfoDropdown:init()
-    -- TODO: Find and set sizes for closedSize and openSize and figure out
-    -- AnchorPoints and Positions
-    self.isOpen = true
-    self.closedSize = UDim2.new()
-    self.openSize = UDim2.new(0.839, 0, 0.978, 1)
+    self.closedSize = UDim2.new(0.143, 0, 0, 0)
+    self.openSize = UDim2.new(0.143, 0, 2.668, 0)
 
     self.xScale, self.updateXScale = Roact.createBinding(self.closedSize.X.Scale)
     self.xScaleMotor = Otter.createSingleMotor(self.closedSize.X.Scale)
@@ -23,6 +21,10 @@ function InfoDropdown:init()
     self.yScale, self.updateYScale = Roact.createBinding(self.closedSize.Y.Scale)
     self.yScaleMotor = Otter.createSingleMotor(self.closedSize.Y.Scale)
     self.yScaleMotor:onStep(self.updateYScale)
+
+    self.transparency, self.updateTransparency = Roact.createBinding(1)
+    self.transparencyMotor = Otter.createSingleMotor(1)
+    self.transparencyMotor:onStep(self.updateTransparency)
 
     self.size = Roact.joinBindings({self.xScale, self.yScale}):map(function(sizes)
         return UDim2.fromScale(sizes[1], sizes[2])
@@ -54,21 +56,24 @@ function InfoDropdown:render()
     end
 
     return Roact.createElement("Frame", {
-        Size = UDim2.new(0.143, 0, 2.668, 0),
-        Position = UDim2.new(0.839, 0, 0.978, 1),
+        Size = self.size,
+        Position = UDim2.new(0.91, 0, 1, 0),
         BackgroundColor3 = Color3.fromRGB(9, 9, 9),
-        BackgroundTransparency = 0.5,
+        BackgroundTransparency = self.transparency,
         BorderSizePixel = 0,
+        AnchorPoint = Vector2.new(0.5, 0)
     }, children)
 end
 
-function InfoDropdown:willUpdate()
-    if self.props.state == true then
-        self.xScaleMotor:setGoal(Otter.spring(self.openSize, Constants.DROPDOWN_SPRING_CONFIG))
-        self.yScaleMotor:setGoal(Otter.spring(self.openSize, Constants.DROPDOWN_SPRING_CONFIG))
+function InfoDropdown:willUpdate(nextProps)
+    if nextProps.state == true then
+        self.transparencyMotor:setGoal(Otter.spring(0.5, Constants.DROPDOWN_SPRING_CONFIG_2))
+        self.xScaleMotor:setGoal(Otter.spring(self.openSize.X.Scale, Constants.DROPDOWN_SPRING_CONFIG_2))
+        self.yScaleMotor:setGoal(Otter.spring(self.openSize.Y.Scale, Constants.DROPDOWN_SPRING_CONFIG_2))
     else
-        self.xScaleMotor:setGoal(Otter.spring(self.closedSize, Constants.DROPDOWN_SPRING_CONFIG))
-        self.yScaleMotor:setGoal(Otter.spring(self.closedSize, Constants.DROPDOWN_SPRING_CONFIG))
+        self.transparencyMotor:setGoal(Otter.spring(1, Constants.DROPDOWN_SPRING_CONFIG_2))
+        self.xScaleMotor:setGoal(Otter.spring(self.closedSize.X.Scale, Constants.DROPDOWN_SPRING_CONFIG_2))
+        self.yScaleMotor:setGoal(Otter.spring(self.closedSize.Y.Scale, Constants.DROPDOWN_SPRING_CONFIG_2))
     end
 end
 
@@ -79,7 +84,7 @@ function InfoDropdown:willUnmount()
     self.yScaleMotor = nil
 end
 
-local function mapStateToProps(state, props)
+local function mapStateToProps(state)
     return state.Dropdown
 end
 
