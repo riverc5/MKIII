@@ -6,21 +6,21 @@ local RoactRodux = require(ReplicatedStorage.Modules.RoactRodux)
 local Main = require(script.Parent.Main)
 local Bar = require(script.Parent.Bar)
 local ContentsContainer = require(script.Parent.ContentsContainer)
+local TabSelection = require(script.Parent.TabSelection)
 
 local App = Roact.Component:extend("App")
 
 function App:render()
     local children = {}
 
-    -- This is a fix for when we render stories, because if we render Main directly,
-    -- it will render the ScreenGui and Hoarcekat will refuse to work.
-    if self.props.isStory then
+    if self.props["isStory"]then
         children["Bar"] = Roact.createElement(Bar)
         children["ContentsContainer"] = Roact.createElement(ContentsContainer)
+        children["TabSelection"] = Roact.createElement(TabSelection)
     else
-        children["Main"] = Roact.createElement(ContentsContainer)
+        children["Main"] = Roact.createElement(Main)
     end
-
+    
     return Roact.createElement(RoactRodux.StoreProvider, {
         store = self.props.store,
     }, children)

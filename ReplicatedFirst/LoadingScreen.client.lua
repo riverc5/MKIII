@@ -44,14 +44,10 @@ if not game.IsLoaded then
     game.Loaded:Wait()
 end
 
-wait(5)
-
 for _, content in pairs(Constants.CONTENT) do
     ContentProvider:PreloadAsync({content})
     current += INCREMENT
     mainMenuStore:dispatch(SetBarAlpha(current))
-    -- TODO PROD-2: Remove this wait on production.
-    --wait(0.5)
 end
 
 mainMenuStore:dispatch(SetFinished(true))
@@ -60,6 +56,4 @@ wait(0.5)
 
 Roact.unmount(handle)
 
-StarterGui:SetCore("TopbarEnabled", true)
-UserInputService.ModalEnabled = false
 UserInputService.MouseIconEnabled = true

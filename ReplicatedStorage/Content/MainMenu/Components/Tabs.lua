@@ -3,9 +3,9 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Roact = require(ReplicatedStorage.Modules.Roact)
 local RoactRodux = require(ReplicatedStorage.Modules.RoactRodux)
 
-local Tabs = Roact.Component:extend("Tabs")
-
 local Tab = require(script.Parent.Tab)
+
+local Tabs = Roact.Component:extend("Tabs")
 
 function Tabs:render()
     local children = {
@@ -18,8 +18,10 @@ function Tabs:render()
     for _, tab in pairs(self.props.Tabs) do
         local element = Roact.createElement(Tab, {
             Icon = tab.Icon,
+            Text = tab.Text,
             Name = tab.Name,
         })
+        
         children[tab.Index] = element
     end
 
@@ -31,10 +33,8 @@ function Tabs:render()
     }, children)
 end
 
-local function mapStateToProps(state, props)
-    return {
-        Tabs = state.Tabs,
-    }
+local function mapStateToProps(state)
+    return state.Tabs
 end
 
 return RoactRodux.connect(mapStateToProps)(Tabs)
